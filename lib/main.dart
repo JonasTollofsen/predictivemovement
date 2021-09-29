@@ -47,52 +47,54 @@ class _MyAppState extends State<MyApp> {
         child = Installningar();
     }
     return MaterialApp(
-      home: Scaffold(
-        body: child,
+      home: SafeArea(
+        child: Scaffold(
+          body: child,
 
-        bottomNavigationBar: BottomNavigationBar(
-          iconSize: 27.0,
+          bottomNavigationBar: BottomNavigationBar(
+            iconSize: 27.0,
 
 
-          currentIndex: _pageIndex,
-          onTap: (int index) => setState(() => _pageIndex = index),
-          type : BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.account_circle_rounded
-                ),
-                label: "Konto"
-            ),
+            currentIndex: _pageIndex,
+            onTap: (int index) => setState(() => _pageIndex = index),
+            type : BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      Icons.account_circle_rounded
+                  ),
+                  label: "Konto"
+              ),
 
-            BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.calendar_today_outlined
-                ),
-                label: "Kalender"
-            ),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      Icons.calendar_today_outlined
+                  ),
+                  label: "Kalender"
+              ),
 
-            BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.card_travel
-                ),
-                label: "Jobba"
-            ),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      Icons.card_travel
+                  ),
+                  label: "Jobba"
+              ),
 
-            BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.map
-                ),
-                label: "Karta"
-            ),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      Icons.map
+                  ),
+                  label: "Karta"
+              ),
 
-            BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.settings
-                ),
-                label: "Inställningar"
-            ),
-          ],
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      Icons.settings
+                  ),
+                  label: "Inställningar"
+              ),
+            ],
+          ),
         ),
       )
 
