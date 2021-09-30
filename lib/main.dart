@@ -6,22 +6,30 @@ import 'konto.dart';
 import 'kalender.dart';
 import 'installningar.dart';
 import 'karta.dart';
+import 'login_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
-  runApp(MyApp());
-
+  runApp(MaterialApp(
+    theme: ThemeData(
+      primarySwatch: Colors.indigo,
+    ),
+    home: LoginPage(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  int _pageIndex = 0;
-  Widget child = Container();
+  int _pageIndex = 2; // starting page
+  Widget child = Container(
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -46,59 +54,51 @@ class _MyAppState extends State<MyApp> {
       case 4:
         child = Installningar();
     }
-    return MaterialApp(
-      home: SafeArea(
-        child: Scaffold(
-          body: child,
+    return Scaffold(
+        body: child,
 
-          bottomNavigationBar: BottomNavigationBar(
-            iconSize: 27.0,
+        bottomNavigationBar: BottomNavigationBar(
+          iconSize: 27.0,
+          currentIndex: _pageIndex,
+          onTap: (int index) => setState(() => _pageIndex = index),
+          type : BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(
+                    FontAwesomeIcons.userAlt
+                ),
+                label: "Konto"
+            ),
 
+            BottomNavigationBarItem(
+                icon: Icon(
+                    FontAwesomeIcons.calendarAlt
+                ),
+                label: "Kalender"
+            ),
 
-            currentIndex: _pageIndex,
-            onTap: (int index) => setState(() => _pageIndex = index),
-            type : BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.account_circle_rounded
-                  ),
-                  label: "Konto"
-              ),
+            BottomNavigationBarItem(
+                icon: Icon(
+                    FontAwesomeIcons.carAlt
+                ),
+                label: "Jobba"
+            ),
 
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.calendar_today_outlined
-                  ),
-                  label: "Kalender"
-              ),
+            BottomNavigationBarItem(
+                icon: Icon(
+                    FontAwesomeIcons.solidMap
+                ),
+                label: "Karta"
+            ),
 
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.card_travel
-                  ),
-                  label: "Jobba"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.map
-                  ),
-                  label: "Karta"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.settings
-                  ),
-                  label: "Inställningar"
-              ),
-            ],
-          ),
-        ),
-      )
-
-
+            BottomNavigationBarItem(
+                icon: Icon(
+                    FontAwesomeIcons.cog
+                ),
+                label: "Inställningar"
+            ),
+          ],
+      ),
     );
   }
 }

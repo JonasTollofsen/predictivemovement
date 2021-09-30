@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 
@@ -22,14 +23,14 @@ class _MainPageState extends State<MainPage> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage("assets/googleMapsPlaceholder.jpg")
+                  image: AssetImage("assets/Luleå.png")
                 )
               ),
           ),
         ),
 
           Padding(
-            padding: const EdgeInsets.only(bottom: 20, top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
                 Text(
@@ -39,33 +40,36 @@ class _MainPageState extends State<MainPage> {
 
                   ),
                 ),
-                Container(
-                  width: 300,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 80),
+                  child: SizedBox(
+                    width: double.infinity,
 
-                  child: Divider(
-                    thickness: 1,
-                    color: Colors.black,
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          RowItem(
-              iconImage: Icons.airline_seat_recline_normal
+          
+          Expanded(
+            child: ListView(
+              children: [
+                RowItem(iconImage: FontAwesomeIcons.box),
+                RowItem(iconImage: FontAwesomeIcons.car),
+                RowItem(iconImage: FontAwesomeIcons.box),
+                RowItem(iconImage: FontAwesomeIcons.box),
+                RowItem(iconImage: FontAwesomeIcons.car),
+                RowItem(iconImage: FontAwesomeIcons.car),
+                RowItem(iconImage: FontAwesomeIcons.box),
+                RowItem(iconImage: FontAwesomeIcons.car),
+                RowItem(iconImage: FontAwesomeIcons.car),
+              ],
+            ),
           ),
-
-          RowItem(
-              iconImage: Icons.airline_seat_recline_normal
-          ),
-
-          RowItem(
-              iconImage: Icons.airline_seat_recline_normal
-          ),
-
-          RowItem(
-              iconImage: Icons.airline_seat_recline_normal
-          ),
-
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(

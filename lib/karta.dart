@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'job_details.dart';
 
 class Karta extends StatefulWidget {
 
@@ -111,125 +112,132 @@ class JobCard extends StatelessWidget {
       child: Material(
         borderRadius: BorderRadius.circular(20),
         elevation: 20.0,
-        child: Container(
-          decoration: BoxDecoration(
-           color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(20)
-          ),
-          height: 200,
-          width: double.infinity,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                    ),
-                    image: DecorationImage(
-                      fit: BoxFit.fitWidth,
-                      image: AssetImage(
-                          'assets/Luleå.png',
+        child: InkWell(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => JobDetails()),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20)
+            ),
+            height: 200,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.fitWidth,
+                        image: AssetImage(
+                            'assets/Luleå.png',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
 
-              Expanded(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                          typeOfJob,
-                          size: 25,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                            typeOfJob,
+                            size: 25,
+                        ),
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                date,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  date,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(time),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only( top: 10.0, bottom: 8.0, right: 5.0),
-                              child: Icon(
-                                Icons.watch_later_outlined,
-                                size: 17.0,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(time),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only( top: 10.0, bottom: 8.0, right: 5.0),
+                                child: Icon(
+                                  Icons.watch_later_outlined,
+                                  size: 17.0,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0, top: 10.0),
-                              child: Text(
-                                  timeToComplete.toString() + " min",
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0, bottom: 10.0, top: 10.0),
+                                child: Text(
+                                    timeToComplete.toString() + " min",
+                                    style: TextStyle(
+                                      fontSize: 13.0
+                                    ),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0, right: 8.0),
+                                child: Icon(
+                                  FontAwesomeIcons.road,
+                                  size: 17.0,
+                                ),
+                              ),
+                              Text(
+                                  distance.toString() + " km",
                                   style: TextStyle(
                                     fontSize: 13.0
                                   ),
                               ),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 8.0),
-                              child: Icon(
-                                FontAwesomeIcons.road,
-                                size: 17.0,
-                              ),
-                            ),
-                            Text(
-                                distance.toString() + " km",
-                                style: TextStyle(
-                                  fontSize: 13.0
-                                ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                   Expanded(
-                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.end,
-                       children: [
-                         Text(
-                             pay.toString() + " SEK",
-                           style: TextStyle(
-                             fontSize: 18.0,
-                             color: Colors.green,
-                             fontWeight: FontWeight.bold
+                            ],
+                          ),
+                        ],
+                      ),
+                     Expanded(
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           Text(
+                               pay.toString() + " SEK",
+                             style: TextStyle(
+                               fontSize: 18.0,
+                               color: Colors.green,
+                               fontWeight: FontWeight.bold
+                             ),
                            ),
-                         ),
-                         TextButton(
-                           onPressed: (){},
-                           child: Icon(
-                             Icons.arrow_forward_ios,
-                             color: Colors.black,
+                           Padding(
+                             padding: const EdgeInsets.all(16.0),
+                             child: Icon(
+                               Icons.arrow_forward_ios,
+                               color: Colors.black,
+                             ),
                            ),
-                         ),
-                       ],
+                         ],
+                       ),
                      ),
-                   ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
