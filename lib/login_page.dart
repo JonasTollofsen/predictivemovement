@@ -9,7 +9,6 @@ import 'bli_medlem.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -20,68 +19,70 @@ class _LoginPageState extends State<LoginPage> {
     final _formKey = GlobalKey<FormState>();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage(
-                  'assets/background.jpg',
+      child: MaterialApp(
+        home: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage(
+                    'assets/background.jpg',
+                ),
               ),
             ),
-          ),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Image.asset(
-                    'assets/Logo-vit-1.png',
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                      'assets/Logo-vit-1.png',
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CustomInputField(
-                              helpText: "Användarnamn",
-                              passwordField: false
-                          ),
-                          CustomInputField(
-                            helpText: "Lösenord",
-                            passwordField: true,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CustomButton(
-                            buttonText: "Logga in",
-                            route: MaterialPageRoute(
-                                builder: (context) => MyApp(),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CustomInputField(
+                                helpText: "Användarnamn",
+                                passwordField: false
                             ),
-                          ),
-
-                          CustomButton(
-                              buttonText: "Bli medlem",
-                              route: MaterialPageRoute(
-                                  builder: (context) => BliMedlem(),
-                              ),
-                          ),
-                        ],
+                            CustomInputField(
+                              helpText: "Lösenord",
+                              passwordField: true,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CustomButton(
+                              buttonText: "Logga in",
+                              route: MaterialPageRoute(
+                                  builder: (context) => MyApp(),
+                              ),
+                            ),
+
+                            CustomButton(
+                                buttonText: "Bli medlem",
+                                route: MaterialPageRoute(
+                                    builder: (context) => BliMedlem(),
+                                ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

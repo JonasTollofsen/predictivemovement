@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'main_page.dart';
 import 'konto.dart';
@@ -8,15 +7,10 @@ import 'installningar.dart';
 import 'karta.dart';
 import 'login_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(
-      primarySwatch: Colors.indigo,
-    ),
-    home: LoginPage(),
-    ),
-  );
+  runApp(LoginPage());
 }
 
 class MyApp extends StatefulWidget {
@@ -27,79 +21,121 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _pageIndex = 2; // starting page
-  Widget child = Container(
-  );
 
   @override
   Widget build(BuildContext context) {
+    Widget page = Container();
 
-    switch(_pageIndex) {
-      case 0:
-        child = Konto();
-        break;
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+      ),
+      home: Scaffold(
+          body: page,
 
-      case 1:
-        child = Kalender();
-        break;
-
-      case 2:
-        child = MainPage();
-        break;
-
-      case 3:
-        child = Karta();
-        break;
-
-      case 4:
-        child = Installningar();
-    }
-    return Scaffold(
-        body: child,
-
-        bottomNavigationBar: BottomNavigationBar(
-          iconSize: 27.0,
-          currentIndex: _pageIndex,
-          onTap: (int index) => setState(() => _pageIndex = index),
-          type : BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.userAlt
-                ),
-                label: "Konto"
-            ),
-
-            BottomNavigationBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.calendarAlt
-                ),
-                label: "Kalender"
-            ),
-
-            BottomNavigationBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.carAlt
-                ),
-                label: "Jobba"
-            ),
-
-            BottomNavigationBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.solidMap
-                ),
-                label: "Karta"
-            ),
-
-            BottomNavigationBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.cog
-                ),
-                label: "Inställningar"
-            ),
-          ],
+        bottomNavigationBar: BottomNavigationBarCupertino(),
       ),
     );
   }
 }
+
+int pageIndex = 2; // starting page
+
+class BottomNavigationBarCupertino extends StatelessWidget {
+  const BottomNavigationBarCupertino({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      FontAwesomeIcons.userAlt
+                  ),
+                  label: "Konto"
+              ),
+
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      FontAwesomeIcons.calendarAlt
+                  ),
+                  label: "Kalender"
+              ),
+
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      FontAwesomeIcons.carAlt
+                  ),
+                  label: "Jobba"
+              ),
+
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      FontAwesomeIcons.solidMap
+                  ),
+                  label: "Karta"
+              ),
+
+              BottomNavigationBarItem(
+                  icon: Icon(
+                      FontAwesomeIcons.cog
+                  ),
+                  label: "Inställningar"
+              ),
+            ],
+        ),
+      tabBuilder: (context, pageIndex) {
+        switch (pageIndex) {
+          case 0:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(
+                child: Konto(),
+              );
+            }
+            );
+
+          case 1:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(
+                child: Kalender(),
+              );
+            }
+            );
+
+          case 2:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(
+                child: MainPage(),
+              );
+            }
+            );
+
+          case 3:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(
+                child: Karta(),
+              );
+            }
+            );
+
+          case 4:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(
+                child: Installningar(),
+              );
+            }
+            );
+        }
+        return Text("No Bottom nav bar sorry about that...");
+      }
+    );
+  }
+}
+
+
+
+
+
+
 

@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'job_details.dart';
 
 class Karta extends StatefulWidget {
+  const Karta({Key? key}) : super(key: key);
+
 
   @override
   State<Karta> createState() => _KartaState();
@@ -88,7 +90,7 @@ class _KartaState extends State<Karta> {
   }
 }
 
-class JobCard extends StatelessWidget {
+class JobCard extends StatefulWidget {
   final IconData typeOfJob;
   final int timeToComplete;
   final int distance;
@@ -105,6 +107,11 @@ class JobCard extends StatelessWidget {
     required this.pay,
   });
 
+  @override
+  State<JobCard> createState() => _JobCardState();
+}
+
+class _JobCardState extends State<JobCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -150,7 +157,7 @@ class JobCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                            typeOfJob,
+                            widget.typeOfJob,
                             size: 25,
                         ),
                       ),
@@ -162,7 +169,7 @@ class JobCard extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  date,
+                                  widget.date,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0
@@ -171,7 +178,7 @@ class JobCard extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(time),
+                                child: Text(widget.time),
                               )
                             ],
                           ),
@@ -187,7 +194,7 @@ class JobCard extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(right: 10.0, bottom: 10.0, top: 10.0),
                                 child: Text(
-                                    timeToComplete.toString() + " min",
+                                    widget.timeToComplete.toString() + " min",
                                     style: TextStyle(
                                       fontSize: 13.0
                                     ),
@@ -202,7 +209,7 @@ class JobCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                  distance.toString() + " km",
+                                  widget.distance.toString() + " km",
                                   style: TextStyle(
                                     fontSize: 13.0
                                   ),
@@ -216,7 +223,7 @@ class JobCard extends StatelessWidget {
                          mainAxisAlignment: MainAxisAlignment.end,
                          children: [
                            Text(
-                               pay.toString() + " SEK",
+                               widget.pay.toString() + " SEK",
                              style: TextStyle(
                                fontSize: 18.0,
                                color: Colors.green,
