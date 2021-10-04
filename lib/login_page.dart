@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:predictivemovement/main.dart';
 import 'bli_medlem.dart';
+import 'globals.dart' as globals;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,73 +20,62 @@ class _LoginPageState extends State<LoginPage> {
     final _formKey = GlobalKey<FormState>();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: MaterialApp(
-        home: Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(
-                    'assets/background.jpg',
+      child: Scaffold(
+          body: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                    'assets/Logo-vit-1.png',
+                  color: Colors.black,
                 ),
               ),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Image.asset(
-                      'assets/Logo-vit-1.png',
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CustomInputField(
-                                helpText: "Användarnamn",
-                                passwordField: false
-                            ),
-                            CustomInputField(
-                              helpText: "Lösenord",
-                              passwordField: true,
-                            ),
-                          ],
-                        ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CustomInputField(
+                              helpText: "Användarnamn",
+                              passwordField: false
+                          ),
+                          CustomInputField(
+                            helpText: "Lösenord",
+                            passwordField: true,
+                          ),
+                        ],
                       ),
+                    ),
 
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CustomButton(
-                              buttonText: "Logga in",
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CustomButton(
+                            buttonText: "Logga in",
+                            route: MaterialPageRoute(
+                                builder: (context) => MyApp(),
+                            ),
+                          ),
+
+                          CustomButton(
+                              buttonText: "Bli medlem",
                               route: MaterialPageRoute(
-                                  builder: (context) => MyApp(),
+                                  builder: (context) => BliMedlem(),
                               ),
-                            ),
-
-                            CustomButton(
-                                buttonText: "Bli medlem",
-                                route: MaterialPageRoute(
-                                    builder: (context) => BliMedlem(),
-                                ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      ),
     );
   }
 }
@@ -98,14 +88,15 @@ class _LoginPageState extends State<LoginPage> {
 class CustomButton extends StatelessWidget {
   final String buttonText;
   final MaterialPageRoute route;
-  const CustomButton({required this.buttonText, required this.route});
+  CustomButton({required this.buttonText, required this.route});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: (){
           Navigator.push(
-            context, route,
+            context,
+            route,
           );
         },
         child: Padding(
@@ -136,9 +127,6 @@ class CustomInputField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: TextFormField(
         obscureText: passwordField,
-        style: TextStyle(
-            color: Colors.white
-        ),
         textAlign: TextAlign.center,
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
@@ -148,9 +136,6 @@ class CustomInputField extends StatelessWidget {
               )
             ),
             hintText: helpText,
-          hintStyle: TextStyle(
-              color: Colors.white
-          ),
         ),
       ),
     );

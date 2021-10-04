@@ -1,141 +1,102 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_final_fields
 import 'package:flutter/material.dart';
+import 'package:predictivemovement/job_bank.dart';
+import 'package:provider/provider.dart';
 import 'main_page.dart';
 import 'konto.dart';
 import 'kalender.dart';
 import 'installningar.dart';
 import 'karta.dart';
-import 'login_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-void main() {
-  runApp(LoginPage());
-}
+void main() => runApp(
+    MyApp()
+);
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  PersistentTabController _controller = PersistentTabController(initialIndex: 2);
 
-class _MyAppState extends State<MyApp> {
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget page = Container();
-
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      home: Scaffold(
-          body: page,
-
-        bottomNavigationBar: BottomNavigationBarCupertino(),
-      ),
-    );
-  }
-}
-
-int pageIndex = 2; // starting page
-
-class BottomNavigationBarCupertino extends StatelessWidget {
-  const BottomNavigationBarCupertino({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      FontAwesomeIcons.userAlt
-                  ),
-                  label: "Konto"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      FontAwesomeIcons.calendarAlt
-                  ),
-                  label: "Kalender"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      FontAwesomeIcons.carAlt
-                  ),
-                  label: "Jobba"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      FontAwesomeIcons.solidMap
-                  ),
-                  label: "Karta"
-              ),
-
-              BottomNavigationBarItem(
-                  icon: Icon(
-                      FontAwesomeIcons.cog
-                  ),
-                  label: "Inställningar"
-              ),
-            ],
+      home: PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        stateManagement: true, // Default is true.
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
+          duration: Duration(milliseconds: 100),
+          curve: Curves.ease,
         ),
-      tabBuilder: (context, pageIndex) {
-        switch (pageIndex) {
-          case 0:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: Konto(),
-              );
-            }
-            );
-
-          case 1:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: Kalender(),
-              );
-            }
-            );
-
-          case 2:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: MainPage(),
-              );
-            }
-            );
-
-          case 3:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: Karta(),
-              );
-            }
-            );
-
-          case 4:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: Installningar(),
-              );
-            }
-            );
-        }
-        return Text("No Bottom nav bar sorry about that...");
-      }
+        screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
+          duration: Duration(milliseconds: 150),
+        ),
+        navBarStyle: NavBarStyle.style14, // Choose the nav bar style with this property.
+      ),
     );
   }
 }
 
 
+List<Widget> _buildScreens() {
+  return [
+    Konto(),
+    Kalender(),
+    MainPage(),
+    Karta(),
+    Installningar(),
+  ];
+}
 
+List<PersistentBottomNavBarItem> _navBarsItems() {
+  return [
+    PersistentBottomNavBarItem(
+      icon: Icon(FontAwesomeIcons.userAlt),
+      title: ("Konto"),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
 
+    ),
 
+    PersistentBottomNavBarItem(
+      icon: Icon(
+          FontAwesomeIcons.calendarAlt),
+      title: ("Kalender"),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
 
+    PersistentBottomNavBarItem(
+      icon: Icon(
+          FontAwesomeIcons.carAlt,
+      ),
+      title: ("Jobba"),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+
+    PersistentBottomNavBarItem(
+      icon: Icon(FontAwesomeIcons.solidMap),
+      title: ("Karta"),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+
+    PersistentBottomNavBarItem(
+      icon: Icon(FontAwesomeIcons.cog),
+      title: ("Inställningar"),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+
+  ];
+}
 
