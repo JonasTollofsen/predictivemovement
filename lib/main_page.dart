@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage("assets/Luleå.png")
+                    image: AssetImage('assets/luleå.png')
                 )
             ),
           ),

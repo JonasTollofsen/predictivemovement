@@ -1,10 +1,12 @@
 
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'chat.dart';
 import 'globals.dart' as globals;
 import 'account.dart';
 
@@ -21,6 +23,7 @@ final int payout;
 final IconData typeOfJob;
 late Account worker;
 bool jobComplete;
+final LatLng latLng;
 
 Job ({
   required this.jobComplete,
@@ -33,6 +36,7 @@ Job ({
   required this.time,
   required this.payout,
   required this.typeOfJob,
+  required this.latLng,
 });
 
 
@@ -78,6 +82,9 @@ void setWorker(Account worker){
 void removeWorker(){
   worker = Account("None", "None", "None");
 }
+LatLng getLatLng(){
+  return latLng;
+}
 
 }
 
@@ -85,7 +92,7 @@ class JobCard extends StatelessWidget {
 
   final Job jobDetails;
 
-   JobCard({
+   const JobCard({
     required this.jobDetails
   });
 
@@ -122,7 +129,7 @@ class JobCard extends StatelessWidget {
                       image: DecorationImage(
                         fit: BoxFit.fitWidth,
                         image: AssetImage(
-                          'assets/Luleå.png',
+                          'assets/luleå.png',
                         ),
                       ),
                     ),
@@ -366,10 +373,10 @@ class JobDetails extends StatelessWidget {
     return Scaffold(
       body: ScrollConfiguration(
         behavior: MyBehavior(),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Stack(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -384,7 +391,6 @@ class JobDetails extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(30)
                       ),
-
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -394,7 +400,7 @@ class JobDetails extends StatelessWidget {
                                   top: Radius.circular(15)
                               ),
                               child: Image.asset(
-                                'assets/Luleå.png',
+                                'assets/luleå.png',
                               ),
                             ),
                             Row(
@@ -633,34 +639,34 @@ class JobDetails extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton(
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Avbryt",
-                                  style: TextStyle(
-                                      fontSize: 20
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(160, 50),
-                                  primary: Colors.red,
-
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-
+                ),
+                Positioned(
+                  right: 0,
+                  child: TextButton(
+                    onPressed:(){
+                      Navigator.pop(context);
+                    },
+                    child:  Container(
+                      width: 40.0,
+                      height: 40.0,
+                      child: Icon(Icons.close, color: Colors.red, size: 40,),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(color: Colors.black,offset: Offset(0, 1), blurRadius: 2),
+                          ],
+                          shape: BoxShape.circle,
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
+              ]
+            )
           ],
         ),
       )
@@ -679,10 +685,11 @@ class DetailsAboutAcceptedJob extends StatelessWidget {
     return Scaffold(
       body: ScrollConfiguration(
         behavior: MyBehavior(),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Stack(
+              alignment: Alignment.topRight,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -697,7 +704,6 @@ class DetailsAboutAcceptedJob extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(30)
                       ),
-
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -707,7 +713,8 @@ class DetailsAboutAcceptedJob extends StatelessWidget {
                                   top: Radius.circular(15)
                               ),
                               child: Image.asset(
-                                'assets/Luleå.png',
+                                'assets/luleå.png',
+
                               ),
                             ),
                             Row(
@@ -866,101 +873,26 @@ class DetailsAboutAcceptedJob extends StatelessWidget {
                                 ),
                               ],
                             ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      content: const Text(
-                                        'Är du säker att du vill ta bort jobbet?',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20
-
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.red,
-                                                    minimumSize: Size(100, 40)
-                                                ),
-                                                child: const Text(
-                                                  'Nej',
-                                                  style: TextStyle(
-                                                      fontSize: 20
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  globals.loggedInUser.acceptedJobs.remove(jobDetails);
-                                                  jobDetails.removeWorker();
-                                                  globals.jobBank.jobs.add(jobDetails);
-                                                  Navigator.pop(context);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.green,
-                                                    minimumSize: Size(100, 40)
-                                                ),
-                                                child: const Text(
-                                                  'Ja',
-                                                  style: TextStyle(
-                                                      fontSize: 20
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                            ElevatedButton(
+                              onPressed: (){
+                                pushNewScreen(
+                                    context, screen: Chat(jobDetails: jobDetails),
+                                );
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: Icon(Icons.chat_rounded),
+                                  ),
+                                  Text(
+                                    "Chatta med " + jobDetails.getCustomerName(),
+                                    style: TextStyle(
+                                      fontSize: 17
                                     ),
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Ta bort",
-                                  style: TextStyle(
-                                      fontSize: 20
                                   ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(160, 50),
-                                    primary: Colors.red
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton(
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Tillbaka",
-                                  style: TextStyle(
-                                      fontSize: 20
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(160, 50),
-                                  primary: Colors.green,
-                                ),
+                                ],
                               ),
                             ),
                           ],
@@ -968,12 +900,123 @@ class DetailsAboutAcceptedJob extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
+                Positioned(
+                  right: 0,
+                  child: TextButton(
+                      onPressed:(){
+                        Navigator.pop(context);
+                      },
+                      child:  Container(
+                        width: 40.0,
+                        height: 40.0,
+                        child: Icon(Icons.close, color: Colors.red, size: 40,),
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: Colors.black,offset: Offset(0, 1), blurRadius: 2),
+                            ],
+                            shape: BoxShape.circle,
+                            color: Colors.white
+                        ),
+                      ),
+                  ),
+                ),
               ],
             ),
           ],
         ),
       )
+    );
+  }
+}
+
+class TaBortJobb extends StatelessWidget {
+  const TaBortJobb({
+    Key? key,
+    required this.jobDetails,
+  }) : super(key: key);
+
+  final Job jobDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ElevatedButton(
+        onPressed: () {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              content: const Text(
+                'Är du säker att du vill ta bort jobbet?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+
+                ),
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            minimumSize: Size(100, 40)
+                        ),
+                        child: const Text(
+                          'Nej',
+                          style: TextStyle(
+                              fontSize: 20
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          globals.loggedInUser.acceptedJobs.remove(jobDetails);
+                          jobDetails.removeWorker();
+                          globals.jobBank.jobs.add(jobDetails);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            minimumSize: Size(100, 40)
+                        ),
+                        child: const Text(
+                          'Ja',
+                          style: TextStyle(
+                              fontSize: 20
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+          Navigator.pop(context);
+        },
+        child: Text(
+          "Ta bort",
+          style: TextStyle(
+              fontSize: 20
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+            minimumSize: Size(160, 50),
+            primary: Colors.red
+        ),
+      ),
     );
   }
 }

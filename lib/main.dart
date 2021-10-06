@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:predictivemovement/job_bank.dart';
 import 'package:provider/provider.dart';
+import 'jobba.dart';
 import 'main_page.dart';
 import 'konto.dart';
 import 'kalender.dart';
@@ -50,7 +51,7 @@ List<Widget> _buildScreens() {
   return [
     Konto(),
     Kalender(),
-    MainPage(),
+    Jobba(),
     Karta(),
     Installningar(),
   ];
