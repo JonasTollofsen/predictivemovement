@@ -16,6 +16,14 @@ class Jobba extends StatefulWidget {
 class _JobbaState extends State<Jobba> {
   @override
   Widget build(BuildContext context) {
-    return globals.jobBank.generateListOfAvailableJobs();
+    return Column(
+      children: [
+        Expanded(child: globals.jobBank.generateListOfAvailableJobs()),
+        ElevatedButton(onPressed: (){setState(() {
+
+        });}, child: Text("refresh"))
+      ],
+    );
   }
 }
+

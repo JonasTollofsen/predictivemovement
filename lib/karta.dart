@@ -25,9 +25,8 @@ final Set<Marker> _markers = {};
 class _KartaState extends State<Karta> {
   Set<Marker> listMarkers = {};
   late GoogleMapController mapController;
-
-
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
+  late BitmapDescriptor customPin;
 
 
   static final CameraPosition initCameraPosition = CameraPosition(
@@ -37,13 +36,24 @@ class _KartaState extends State<Karta> {
       zoom: 13.5
   );
 
+  @override
+  void initState() {
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'assets/destination_map_marker.png').then((onValue) {
+      customPin = onValue;
+     }
+    );
+  }
+
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
-    int i = 0;
-    String markerValue1 = '';
-    Set <Marker>listMarkers = generateMarkers(context);
+    listMarkers = generateMarkers(context);
 
     return GoogleMap(
         onMapCreated:(GoogleMapController controller) {
@@ -51,6 +61,7 @@ class _KartaState extends State<Karta> {
         },
         initialCameraPosition: initCameraPosition,
         compassEnabled: true,
+      myLocationButtonEnabled: true,
       markers: listMarkers,
     );
   }

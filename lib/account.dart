@@ -1,17 +1,32 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
-import 'package:predictivemovement/karta.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'globals.dart' as globals;
 import 'job.dart';
-import 'kalender.dart';
 
 class Account{
   final String _username;
   final String _password;
   final String _name;
   List<Job> acceptedJobs = [];
-  List<Job> completedJobs = [];
+  List<Job> completedJobs = [
+    Job(
+        jobComplete: true,
+        customerName: 'John Smith',
+        pickupAddress: 'Teststaden 45',
+        destination: 'Testby 98',
+        distance: 30,
+        timeToComplete: 25,
+        date: '10 September',
+        time: '13:00',
+        payout: 350,
+        typeOfJob: FontAwesomeIcons.carAlt,
+        latLng: LatLng(65.588061, 22.161556),
+        jobAccepted: true
+    ),
+  ];
 
   Account(
       this._username,
@@ -49,10 +64,9 @@ class Account{
     sortAcceptedJobs();
     int counter = 0;
     return ListView(
-      padding: EdgeInsets.all(0),
       children: [
         for(counter; account.acceptedJobs.length > counter; counter++)
-        CompactCard(jobDetails: account.acceptedJobs[counter])
+        JobCard(jobDetails: account.acceptedJobs[counter], showMap: false,)
       ],
     );
   }
@@ -87,8 +101,8 @@ class GenerateListOfCompletedJobs extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(0),
       children: [
-        for(counter; account.acceptedJobs.length > counter; counter++)
-          CompactCard(jobDetails: account.completedJobs[counter])
+        for(counter; account.completedJobs.length > counter; counter++)
+          JobCard(jobDetails: account.completedJobs[counter], showMap: false, )
       ],
     );
   }

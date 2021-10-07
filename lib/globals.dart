@@ -24,7 +24,8 @@ JobBank jobBank = JobBank(
         payout: 400,
         typeOfJob: FontAwesomeIcons.carAlt,
         jobComplete: false,
-        latLng: const LatLng(65.582172, 22.160498)
+        latLng: const LatLng(65.582172, 22.160498),
+        jobAccepted: false
     ),
 
     Job(customerName: 'Jane Doe',
@@ -37,7 +38,8 @@ JobBank jobBank = JobBank(
     payout: 400,
     typeOfJob: FontAwesomeIcons.box,
     jobComplete: false,
-      latLng: LatLng(65.583112, 22.156506)
+        latLng: LatLng(65.583112, 22.156506),
+        jobAccepted: false
     ),
 
     Job(customerName: 'Jane Doe',
@@ -50,7 +52,8 @@ JobBank jobBank = JobBank(
       payout: 250,
       typeOfJob: FontAwesomeIcons.carAlt,
       jobComplete: false,
-      latLng: LatLng(65.582296, 22.156163)
+      latLng: LatLng(65.582296, 22.156163),
+        jobAccepted: false,
     ),
   ],
 );

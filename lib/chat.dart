@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:predictivemovement/chat_message.dart';
 import 'package:predictivemovement/job.dart';
 import 'dart:math';
 
 class Chat extends StatefulWidget {
-  Job jobDetails;
-  final double pi = 3.1415926535897932;
+  final Job jobDetails;
 
   Chat({
     required this.jobDetails
@@ -20,74 +20,43 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   var textController = TextEditingController();
 
-  @override
-  void dispose(){
-    textController.dispose();
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
+
+    List<ChatMessage> messages = widget.jobDetails.messages;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios
-                  ),
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                ),
-                Icon(FontAwesomeIcons.userAlt),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          widget.jobDetails.getCustomerName(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      Text(
-                          "Aktiv för 1 timme sedan",
-                        style: TextStyle(
-                          fontSize: 10
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: IconButton(
-                      alignment: Alignment.centerRight,
-                      icon: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Icon(
-                            Icons.phone,
-                        ),
-                      ),
-                      onPressed: (){},
-                    ),
-                ),
-              ],
-            ),
+            TopBar(context),
 
-            JobCard(jobDetails: widget.jobDetails),
+            JobCard(
+                jobDetails: widget.jobDetails,
+                showMap: true
+            ),
             Expanded(
-              child: ListView(
-                children: [
-                  ChatBubbleDriver(textMessage: "Jag är snart där."),
-                  ChatBubbleCustomer("Okej, jag väntar utanför."),
-                  ChatBubbleDriver(textMessage: "Jag är framme nu!"),
-                  ChatBubbleCustomer("Perfekt!"),
-                ],
+              child: ListView.builder(
+                itemCount: messages.length,
+                  itemBuilder: (context, index){
+                  return Container(
+                    padding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+                      child: Align(
+                        alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (messages[index].messageType == "receiver"? Colors.grey[200]:Colors.blue[200])
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text(messages[index].messageContent),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
               ),
             ),
 
@@ -103,7 +72,14 @@ class _ChatState extends State<Chat> {
                       size: 30,
                     ),
                     onPressed: (){
-
+                      setState(() {
+                        messages.add(ChatMessage(
+                            messageContent: textController.text,
+                            messageType: "sender"),
+                          );
+                          textController.clear();
+                        }
+                      );
                     },
                   ),
                   border: OutlineInputBorder(
@@ -119,97 +95,125 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
-}
 
-class ChatBubbleCustomer extends StatelessWidget {
-  String textMessage;
-
-  ChatBubbleCustomer(this.textMessage);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.rotationY(pi),
-          ),
-          Flexible(
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20, right: 5),
-                  child: Icon(
-                      FontAwesomeIcons.userAlt,
-                    size: 27,
-                  ),
+  Row TopBar(BuildContext context) {
+    return Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios
                 ),
-                Container(
-                  padding: EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(18),
-                      bottomLeft: Radius.circular(18),
-                      bottomRight: Radius.circular(18),
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              ),
+              Icon(FontAwesomeIcons.userAlt),
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        widget.jobDetails.getCustomerName(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    textMessage,
-                    style: TextStyle(color: Colors.black, fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ChatBubbleDriver extends StatelessWidget {
-
-  String textMessage;
-
-  ChatBubbleDriver({
-    required this.textMessage,
-});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.cyan[900],
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18),
-                  bottomLeft: Radius.circular(18),
-                  bottomRight: Radius.circular(18),
+                    Text(
+                        "Aktiv för 1 timme sedan",
+                      style: TextStyle(
+                        fontSize: 10
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Text(
-              textMessage,
-                style: TextStyle(color: Colors.white, fontSize: 14),
+              Expanded(
+                  child: IconButton(
+                    alignment: Alignment.centerRight,
+                    icon: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(
+                          Icons.phone,
+                        size: 30,
+                      ),
+                    ),
+                    onPressed: (){
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          content:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.phone,
+                                  size: 28,
+                                ),
+                              ),
+                              Text(
+                                "Ring " + widget.jobDetails.getCustomerName() + "?" ,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20
+
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.red,
+                                        minimumSize: Size(100, 40)
+                                    ),
+                                    child: const Text(
+                                      'Avbryt',
+                                      style: TextStyle(
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.green,
+                                        minimumSize: Size(100, 40)
+                                    ),
+                                    child: const Text(
+                                      'Ja',
+                                      style: TextStyle(
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+            ],
+          );
   }
 }
-
 

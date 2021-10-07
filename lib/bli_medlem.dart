@@ -62,7 +62,6 @@ class _CustomFormState extends State<CustomForm> {
                   password.text,
                   name.text),
               );
-              print("YOU BECAME A MEMBER YAY");
             },
             child: Text(
                 "bli medlem!"
@@ -71,7 +70,6 @@ class _CustomFormState extends State<CustomForm> {
 
         ElevatedButton(
             onPressed: (){
-              print(globals.accountBank.getAccount(0).getUsername());
             },
             child: Text(
                 "check dat account!",
