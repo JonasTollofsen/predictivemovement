@@ -2,6 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:predictivemovement/login_page.dart';
+import 'package:predictivemovement/mina_uppdrag.dart';
+import 'package:predictivemovement/main.dart';
+import 'globals.dart' as globals;
+import 'main.dart';
 
 class Konto extends StatefulWidget {
 
@@ -17,7 +23,7 @@ class _KontoState extends State<Konto> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -27,18 +33,48 @@ class _KontoState extends State<Konto> {
               ),
               ElevatedButton(onPressed: (){},
                 style: ElevatedButton.styleFrom(
+
                   textStyle: TextStyle(
                     fontSize: 17
                   )
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 160
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-                  children: [
-                    Icon(Icons.edit),
-                    Text("Redigera profil"),
-                  ],
+                    children: [
+                      Icon(Icons.edit),
+                      Text("Redigera profil"),
+                    ],
+                  ),
+                ),
+              ),
+
+              ElevatedButton(onPressed: (){
+                logout(context);
+              },
+                style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(
+                        fontSize: 17
+                    )
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 160,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                    children: [
+                      Icon(Icons.logout),
+                      Text("Logga ut"),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -46,55 +82,55 @@ class _KontoState extends State<Konto> {
         ),
 
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.check
                     ),
-                    Text("ID verifierat")
-                  ],
-                ),
-              ),
+                  ),
 
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                        Icons.check
                     ),
-                    Text(
-                        "Taxiförarleg, verifierat"
-                    )
-                  ],
-                ),
-              ),
+                  ),
 
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                        Icons.check
                     ),
-                    Text(
-                        "Mobilnummer, verifierat"
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                      "ID verifierat",
+                  ),
+                  Text("Taxiförlag verifierat"),
+                  Text("Mobilnummer verifierat")
+                ],
+              )
+
+                ],
+              ),
+            ),
+
 
 
         Expanded(
+          flex: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -107,11 +143,12 @@ class _KontoState extends State<Konto> {
                         FontAwesomeIcons.car
                     ),
                   ),
-                  Text("27 genomförda uppdrag")
+                  Text(globals.loggedInUser.completedJobs.length.toString() + " genomförda uppdrag")
                 ],
               ),
               MaterialButton(
-                  onPressed: (){},
+                  onPressed: (){
+                  },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -165,4 +202,15 @@ class _KontoState extends State<Konto> {
       ],
     );
   }
+}
+
+void logout(context){
+  pushNewScreenWithRouteSettings(
+      context,
+      screen: LoginPage()
+      , settings: RouteSettings(
+
+    ),
+    withNavBar: false
+  );
 }

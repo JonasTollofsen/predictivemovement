@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -11,23 +13,40 @@ class JobBank {
 
   Widget generateListOfAvailableJobs(){
     int i = 0;
-    sortJobs();
-    return ListView(
+
+    if(globals.jobBank.jobs.isEmpty){
+
+      return Center(
+        child: Text(
+          "Inga tillgängliga jobb!",
+          style: TextStyle(
+            fontSize: 30
+          ),
+        ),
+      );
+    } else {
+      return ListView(
       children: [
         for(i; globals.jobBank.jobs.length > i; i++)
           JobCard(
             jobDetails: globals.jobBank.jobs[i],
             showMap: true,
           ),
-      ],
-    );
+        ],
+      );
+    }
   }
 
-  void sortJobs(){
-    jobs.sort((a, b) => a.getTime().compareTo(b.getTime(),
-      ),
-    );
+  void sortJobsByDistance(){
+    jobs.sort((a, b) =>a.distance.compareTo(b.distance));
+  }
 
+  void sortJobsByDate(){
+    jobs.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+  }
+
+  void sortJobsByPay(){
+    jobs.sort((a, b) => b.payout.compareTo(a.payout));
   }
 }
 

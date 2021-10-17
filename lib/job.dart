@@ -4,6 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -11,16 +12,16 @@ import 'chat.dart';
 import 'chat_message.dart';
 import 'globals.dart' as globals;
 import 'account.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class Job {
+class Job extends ChangeNotifier{
 
 final String customerName;
 final String pickupAddress;
 final String destination;
 final int distance;
 final int timeToComplete;
-final String date;
-final String time;
+final DateTime dateTime;
 final int payout;
 final IconData typeOfJob;
 late Account worker;
@@ -28,8 +29,16 @@ bool jobComplete;
 bool jobAccepted;
 final LatLng latLng;
 List<ChatMessage> messages = [
-ChatMessage(messageContent: "Detta är ett testmeddelande från föraren", messageType: "sender"),
-ChatMessage(messageContent: "Detta är ett testmeddelande från kunden", messageType: "receiver"),
+ChatMessage(
+    messageContent: "Detta är ett testmeddelande från föraren",
+    messageType: "sender",
+    messageTime: DateTime.utc(2021, 10, 12, 13, 10)
+),
+ChatMessage(
+    messageContent: "Detta är ett testmeddelande från kunden",
+    messageType: "receiver",
+    messageTime: DateTime.utc(2021, 10, 12, 14, 30),
+  ),
 ];
 
 Job ({
@@ -39,8 +48,7 @@ Job ({
   required this.destination,
   required this.distance,
   required this.timeToComplete,
-  required this.date,
-  required this.time,
+  required this.dateTime,
   required this.payout,
   required this.typeOfJob,
   required this.latLng,
@@ -68,14 +76,6 @@ int getTimeToComplete(){
   return timeToComplete;
 }
 
-String getDate(){
-  return date;
-}
-
-String getTime(){
-  return time;
-}
-
 int getPayout(){
   return payout;
 }
@@ -94,6 +94,25 @@ LatLng getLatLng(){
   return latLng;
 }
 
+String getMonth(){
+
+  switch(dateTime.month){
+
+    case 1: return "Januari";
+    case 2: return "Februari";
+    case 3: return "Mars";
+    case 4: return "April";
+    case 5: return "Maj";
+    case 6: return "Juni";
+    case 7: return "Juli";
+    case 8: return "Augusti";
+    case 9: return "September";
+    case 10: return "Oktober";
+    case 11: return "November";
+    case 12: return "December";
+    }
+    return "No Month";
+  }
 }
 
 class JobCard extends StatelessWidget {
@@ -177,7 +196,7 @@ class JobCard extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                jobDetails.getDate(),
+                                jobDetails.dateTime.day.toString() + " " +  jobDetails.getMonth(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0
@@ -186,7 +205,7 @@ class JobCard extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(jobDetails.getTime()),
+                              child: Text(jobDetails.dateTime.hour.toString() +":"+ jobDetails.dateTime.minute.toString()),
                             )
                           ],
                         ),
@@ -233,7 +252,7 @@ class JobCard extends StatelessWidget {
                           Text(
                             jobDetails.getPayout().toString() + " SEK",
                             style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold
                             ),
@@ -261,8 +280,10 @@ class JobCard extends StatelessWidget {
 
 class JobDetails extends StatelessWidget {
   final Job jobDetails;
+  final player = AudioCache();
 
-  const JobDetails({
+
+  JobDetails({
     required this.jobDetails
   });
 
@@ -302,115 +323,15 @@ class JobDetails extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxHeight: 250
+                                BigMapForCard(jobDetails: jobDetails),
+                                JobEstimations(jobDetails: jobDetails),
+
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20,  horizontal: 5),
+                                    child: Text('Detaljer:'),
                                   ),
-                                  child: Expanded(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(15),
-                                      ),
-                                      child: GoogleMap(
-                                        zoomControlsEnabled: false,
-                                        initialCameraPosition: CameraPosition(
-                                            zoom: 16,
-                                            target: jobDetails.latLng
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.vertical(
-                                                bottom: Radius.circular(15)
-                                            )
-                                        ),
-                                        height: 50,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text(
-                                                  jobDetails.getDistance().toString() + "km",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-
-                                                Text(
-                                                  "Körsträcka",
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text(
-                                                  jobDetails.getTimeToComplete().toString() + " min",
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.white
-                                                  ),
-                                                ),
-
-                                                Text(
-                                                  "Uppskattad tid",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text(
-                                                  jobDetails.getDate() + " " + jobDetails.getTime(),
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.white
-                                                  ),
-                                                ),
-
-                                                Text(
-                                                  "datum och tid",
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 20,  horizontal: 5),
-                                      child: Text('Detaljer:'),
-                                    ),
-                                  ],
                                 ),
 
                                 Row(
@@ -506,6 +427,9 @@ class JobDetails extends StatelessWidget {
                                 Visibility(
                                   visible: jobDetails.jobAccepted, //button only shows if job is accepted
                                   child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 8
+                                    ),
                                     onPressed: (){
                                       pushNewScreen(
                                         context, screen: Chat(jobDetails: jobDetails),
@@ -559,7 +483,6 @@ class JobDetails extends StatelessWidget {
                                                     child: ElevatedButton(
                                                       onPressed: () {
                                                         Navigator.pop(context);
-                                                        ;
                                                       },
                                                       style: ElevatedButton.styleFrom(
                                                           primary: Colors.red,
@@ -582,6 +505,15 @@ class JobDetails extends StatelessWidget {
                                                         globals.jobBank.jobs.remove(jobDetails);
                                                         jobDetails.jobAccepted = true;
                                                         Navigator.pop(context);
+                                                        player.play("success.wav");
+                                                        showDialog<String>(
+                                                            context: context,
+                                                            builder: (BuildContext context) => AlertDialog(
+                                                              scrollable: true,
+                                                              contentPadding: EdgeInsets.all(0),
+                                                          content: JobConfirmation(jobDetails: jobDetails),
+                                                          ),
+                                                        );
                                                       },
                                                       style: ElevatedButton.styleFrom(
                                                           primary: Colors.green,
@@ -647,6 +579,280 @@ class JobDetails extends StatelessWidget {
           )
         ],
       )
+    );
+  }
+}
+
+class JobEstimations extends StatelessWidget {
+  const JobEstimations({
+    Key? key,
+    required this.jobDetails,
+  }) : super(key: key);
+
+  final Job jobDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(15)
+                )
+            ),
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      jobDetails.getDistance().toString() + "km",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+
+                    Text(
+                      "Körsträcka",
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      jobDetails.getTimeToComplete().toString() + " min",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                      ),
+                    ),
+
+                    Text(
+                      "Uppskattad tid",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      jobDetails.dateTime.day.toString() + " " + jobDetails.getMonth() + " " + jobDetails.dateTime.hour.toString() + ":" + jobDetails.dateTime.minute.toString(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                      ),
+                    ),
+
+                    Text(
+                      "datum och tid",
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class BigMapForCard extends StatelessWidget {
+  const BigMapForCard({
+    Key? key,
+    required this.jobDetails,
+  }) : super(key: key);
+
+
+
+  
+  final Job jobDetails;
+
+  @override
+  Widget build(BuildContext context) {
+
+   
+    
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+          maxHeight: 250
+      ),
+      child: Expanded(
+        child: ClipRRect(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(15),
+          ),
+          child: GoogleMap(
+            zoomControlsEnabled: false,
+            initialCameraPosition: CameraPosition(
+                zoom: 16,
+                target: jobDetails.latLng
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class JobConfirmation extends StatelessWidget {
+
+
+  Job jobDetails;
+  Image checkMark = Image(image: AssetImage('assets/greentick.gif'));
+
+  JobConfirmation({
+    required this.jobDetails,
+
+});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+      Column(
+      children: [
+        checkMark,
+        Text(
+          "Uppdraget är accepterat!",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+
+            Column(
+              children: [
+                Text("Summering: "),
+
+                TextButton(
+                    onPressed: (){},
+                    child: Column(
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.userAlt,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          jobDetails.getCustomerName(),
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    )
+                ),
+              ],
+            ),
+
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Text("Uphämtning: "),
+                      Text(jobDetails.getPickupAddress()),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Text("Destination: "),
+                      Text(jobDetails.getDestination()),
+
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+
+          ],
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: ElevatedButton(
+            onPressed: (){
+              pushNewScreen(
+                context, screen: Chat(jobDetails: jobDetails),
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.chat_rounded,
+                  size: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Text(
+                    "Chatta med " + jobDetails.getCustomerName(),
+                    style: TextStyle(
+                        fontSize: 17
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+        Positioned(
+          right: -10,
+          top: -5,
+          child: TextButton(
+            onPressed:(){
+              Navigator.pop(context);
+            },
+            child:  Container(
+              width: 40.0,
+              height: 40.0,
+              child: Icon(Icons.close, color: Colors.red, size: 40,),
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(color: Colors.black,offset: Offset(0, 1), blurRadius: 2),
+                  ],
+                  shape: BoxShape.circle,
+                  color: Colors.white
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

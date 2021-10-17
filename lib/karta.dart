@@ -32,8 +32,8 @@ class _KartaState extends State<Karta> {
   static final CameraPosition initCameraPosition = CameraPosition(
       bearing: 180,
       target: LatLng(65.584816, 22.154751),
-      tilt: 45,
-      zoom: 13.5
+      tilt: 0,
+      zoom: 15
   );
 
   @override
@@ -47,10 +47,6 @@ class _KartaState extends State<Karta> {
   }
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     listMarkers = generateMarkers(context);
@@ -59,8 +55,11 @@ class _KartaState extends State<Karta> {
         onMapCreated:(GoogleMapController controller) {
           _controller.complete(controller);
         },
-        initialCameraPosition: initCameraPosition,
+      indoorViewEnabled: false,
+      initialCameraPosition: initCameraPosition,
         compassEnabled: true,
+      buildingsEnabled: false,
+      mapType: MapType.terrain,
       myLocationButtonEnabled: true,
       markers: listMarkers,
     );

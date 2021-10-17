@@ -8,13 +8,13 @@ import 'package:predictivemovement/job.dart';
 import 'globals.dart' as globals;
 import 'package:flutter/animation.dart';
 
-class Kalender extends StatefulWidget {
+class MinaUppdrag extends StatefulWidget {
 
   @override
-  _KalenderState createState() => _KalenderState();
+  _MinaUppdragState createState() => _MinaUppdragState();
 }
 
-class _KalenderState extends State<Kalender> {
+class _MinaUppdragState extends State<MinaUppdrag> {
   bool showTidigareBokningar = true;
   bool showAktuellaBokningar = true;
   String buttonText = "visa mer";
@@ -27,6 +27,7 @@ class _KalenderState extends State<Kalender> {
           Visibility(
             visible: showAktuellaBokningar,
             child: Expanded(
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -41,8 +42,7 @@ class _KalenderState extends State<Kalender> {
                     ),
                   ),
                   Expanded(
-                    child: globals.loggedInUser.generateListOfAcceptedJobs(
-                        globals.loggedInUser),
+                    child: GenerateListOfAcceptedJobs(globals.loggedInUser),
                   ),
 
 
@@ -74,6 +74,7 @@ class _KalenderState extends State<Kalender> {
           Visibility(
             visible: showTidigareBokningar,
             child: Expanded(
+              flex: 2,
               child: Column(
                 children: [
                   Padding(
@@ -118,70 +119,6 @@ class _KalenderState extends State<Kalender> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class Booking extends StatelessWidget {
-  IconData typeOfJob;
-  int orderNumber;
-  String date;
-  String time;
-
-  Booking({
-    required this.typeOfJob,
-    required this.orderNumber,
-    required this.date,
-    required this.time
-});
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: (){},
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(
-                  typeOfJob,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(orderNumber.toString()),
-                    Text(date)
-                  ],
-                ),
-              ),
-              Text(time),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Icon(
-                    Icons.arrow_forward_ios
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          indent: 60,
-          endIndent: 60,
-          thickness: 1,
-          color: Colors.black,
-        ),
-      ],
     );
   }
 }

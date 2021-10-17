@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 import 'package:flutter/material.dart';
-import 'package:predictivemovement/job_bank.dart';
-import 'package:provider/provider.dart';
-import 'jobba.dart';
-import 'main_page.dart';
+import 'package:predictivemovement/login_page.dart';
+import 'nya_uppdrag.dart';
 import 'konto.dart';
-import 'kalender.dart';
+import 'mina_uppdrag.dart';
 import 'installningar.dart';
 import 'karta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,24 +11,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 void main() => runApp(
-    MyApp()
+  MaterialApp(
+    home: Scaffold(
+      body:  LoginPage(),
+    ),
+  )
+
 );
 
 class MyApp extends StatelessWidget {
 
-  PersistentTabController _controller = PersistentTabController(initialIndex: 2);
+  PersistentTabController controller = PersistentTabController(initialIndex: 2);
 
   MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: PersistentTabView(
+    return PersistentTabView(
         context,
-        controller: _controller,
+        resizeToAvoidBottomInset: true,
+        controller: controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        stateManagement: true, // Default is true.
+        stateManagement: false, // Default is true.
         popAllScreensOnTapOfSelectedTab: true,
         popActionScreens: PopActionScreensType.all,
         itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
@@ -41,7 +44,6 @@ class MyApp extends StatelessWidget {
           duration: Duration(milliseconds: 150),
         ),
         navBarStyle: NavBarStyle.style14, // Choose the nav bar style with this property.
-      ),
     );
   }
 }
@@ -50,8 +52,8 @@ class MyApp extends StatelessWidget {
 List<Widget> _buildScreens() {
   return [
     Konto(),
-    Kalender(),
-    Jobba(),
+    MinaUppdrag(),
+    NyaUppdrag(),
     Karta(),
     Installningar(),
   ];
@@ -60,6 +62,9 @@ List<Widget> _buildScreens() {
 List<PersistentBottomNavBarItem> _navBarsItems() {
   return [
     PersistentBottomNavBarItem(
+      textStyle: TextStyle(
+          fontSize: 10.0
+      ),
       icon: Icon(FontAwesomeIcons.userAlt),
       title: ("Konto"),
       activeColorPrimary: CupertinoColors.activeBlue,
@@ -68,23 +73,32 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
     ),
 
     PersistentBottomNavBarItem(
+      textStyle: TextStyle(
+        fontSize: 10.0
+      ),
       icon: Icon(
-          FontAwesomeIcons.calendarAlt),
-      title: ("Kalender"),
+          FontAwesomeIcons.tasks),
+      title: ("Mina uppdrag"),
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
 
     PersistentBottomNavBarItem(
+      textStyle: TextStyle(
+          fontSize: 10.0
+      ),
       icon: Icon(
           FontAwesomeIcons.carAlt,
       ),
-      title: ("Jobba"),
+      title: ("Nya uppdrag"),
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
 
     PersistentBottomNavBarItem(
+      textStyle: TextStyle(
+          fontSize: 10.0
+      ),
       icon: Icon(FontAwesomeIcons.solidMap),
       title: ("Karta"),
       activeColorPrimary: CupertinoColors.activeBlue,
@@ -92,6 +106,9 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
     ),
 
     PersistentBottomNavBarItem(
+      textStyle: TextStyle(
+          fontSize: 10.0
+      ),
       icon: Icon(FontAwesomeIcons.cog),
       title: ("Inställningar"),
       activeColorPrimary: CupertinoColors.activeBlue,

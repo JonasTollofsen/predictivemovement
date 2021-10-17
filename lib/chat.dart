@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:predictivemovement/chat_message.dart';
 import 'package:predictivemovement/job.dart';
-import 'dart:math';
 
 class Chat extends StatefulWidget {
   final Job jobDetails;
 
-  Chat({
+  const Chat({
     required this.jobDetails
 });
 
@@ -26,71 +25,61 @@ class _ChatState extends State<Chat> {
 
     List<ChatMessage> messages = widget.jobDetails.messages;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            TopBar(context),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              TopBar(context),
 
-            JobCard(
-                jobDetails: widget.jobDetails,
-                showMap: true
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: messages.length,
-                  itemBuilder: (context, index){
-                  return Container(
-                    padding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
-                      child: Align(
-                        alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: (messages[index].messageType == "receiver"? Colors.grey[200]:Colors.blue[200])
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Text(messages[index].messageContent),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
+              JobCard(
+                  jobDetails: widget.jobDetails,
+                  showMap: true
               ),
-            ),
+              Expanded(
+                child: MessagesList(messages: messages),
+              ),
 
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: TextField(
-                controller: textController,
-                decoration:
-                InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        Icons.send,
-                      size: 30,
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 15,
+                  right: 15,
+                  top: 5,
+                ),
+                child: TextField(
+                  controller: textController,
+                  decoration:
+                  InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          Icons.send,
+                        size: 30,
+                      ),
+                      onPressed: (){
+                        setState(() {
+                          messages.add(ChatMessage(
+                              messageContent: textController.text,
+                              messageType: "sender",
+                              messageTime: DateTime.now()
+                          ),
+                            );
+                            textController.clear();
+                          }
+                        );
+                      },
                     ),
-                    onPressed: (){
-                      setState(() {
-                        messages.add(ChatMessage(
-                            messageContent: textController.text,
-                            messageType: "sender"),
-                          );
-                          textController.clear();
-                        }
-                      );
-                    },
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30)
+                    ),
+                    hintText: "Skriv någonting här..."
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30)
-                  ),
-                  hintText: "Skriv någonting här..."
                 ),
               ),
-            ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -214,6 +203,65 @@ class _ChatState extends State<Chat> {
               ),
             ],
           );
+  }
+}
+
+class MessagesList extends StatelessWidget {
+  const MessagesList({
+    Key? key,
+    required this.messages,
+  }) : super(key: key);
+
+  final List<ChatMessage> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: messages.length,
+        itemBuilder: (context, index){
+        return Container(
+          padding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+            child: Align(
+              alignment: (messages[index].messageType == "receiver"?Alignment.centerLeft:Alignment.centerRight),
+              child: Material(
+                elevation: 4,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 280
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: (messages[index].messageType == "receiver"? Colors.grey[200]:Colors.blue[200])
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: (messages[index].messageType == "receiver"? CrossAxisAlignment.start:CrossAxisAlignment.end),
+                      children: [
+                        Text(
+                            messages[index].messageContent,
+                            textAlign: (messages[index].messageType == "receiver"? TextAlign.end:TextAlign.start),
+
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                              messages[index].messageTime.hour.toString() + ":" + messages[index].messageTime.minute.toString(),
+                            style: TextStyle(
+                              fontSize: 10
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
   }
 }
 

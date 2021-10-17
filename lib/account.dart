@@ -10,6 +10,7 @@ class Account{
   final String _username;
   final String _password;
   final String _name;
+  LatLng position = LatLng((65.584160), 22.154751);
   List<Job> acceptedJobs = [];
   List<Job> completedJobs = [
     Job(
@@ -19,8 +20,9 @@ class Account{
         destination: 'Testby 98',
         distance: 30,
         timeToComplete: 25,
-        date: '10 September',
-        time: '13:00',
+        dateTime: DateTime(
+            10,20,13,00
+        ),
         payout: 350,
         typeOfJob: FontAwesomeIcons.carAlt,
         latLng: LatLng(65.588061, 22.161556),
@@ -72,11 +74,47 @@ class Account{
   }
 
   void sortAcceptedJobs(){
-    globals.loggedInUser.acceptedJobs.sort((a, b) => a.getTime().compareTo(b.getTime(),
+    globals.loggedInUser.acceptedJobs.sort((a, b) => a.dateTime.compareTo(b.dateTime,
       ),
     );
   }
 }
+
+class GenerateListOfAcceptedJobs extends StatelessWidget {
+  Account account;
+
+  GenerateListOfAcceptedJobs(this.account);
+
+  @override
+  Widget build(BuildContext context) {
+    if(account.acceptedJobs.isEmpty) {
+      return Center(
+        child: const Text(
+          "Inga accepterade jobb!",
+          style: TextStyle(
+              fontSize: 30
+          ),
+        ),
+      );
+    }
+
+    sortAcceptedJobs();
+    int counter = 0;
+    return ListView(
+      children: [
+        for(counter; account.acceptedJobs.length > counter; counter++)
+          JobCard(jobDetails: account.acceptedJobs[counter], showMap: false,)
+      ],
+    );
+  }
+
+  void sortAcceptedJobs(){
+    globals.loggedInUser.acceptedJobs.sort((a, b) => a.dateTime.compareTo(b.dateTime,
+    ),
+    );
+  }
+}
+
 
 class GenerateListOfCompletedJobs extends StatelessWidget {
   final Account account;
@@ -99,7 +137,6 @@ class GenerateListOfCompletedJobs extends StatelessWidget {
 
     int counter = 0;
     return ListView(
-      padding: EdgeInsets.all(0),
       children: [
         for(counter; account.completedJobs.length > counter; counter++)
           JobCard(jobDetails: account.completedJobs[counter], showMap: false, )

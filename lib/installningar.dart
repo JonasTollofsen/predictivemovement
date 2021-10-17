@@ -11,17 +11,6 @@ class Installningar extends StatefulWidget {
 class _InstallningarState extends State<Installningar> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "INSTÄLLNINGAR PAGE CONTENT",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 50.0
-          ),
-        ),
-      ],
-    );
+    return SafeArea(child: Image.asset('assets/settings.png'));
   }
 }
